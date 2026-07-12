@@ -10,24 +10,31 @@
 
 An **Identity Breach Exposure Map** showing the percentage of organizations in each country that reported an identity-based breach in 2024. High-exposure countries glow amber. Built with `globe-chart` — a framework-agnostic web component that works in any JS environment.
 
-**The entire globe-chart integration is 3 lines:**
+**The entire integration is declarative template bindings — no refs, no lifecycle hooks:**
 
 ```vue
-<script setup>
-import 'globe-chart'                        // 1. register the custom element
-const globeEl = ref(null)
-onMounted(() => {
-  globeEl.value.data = data                 // 2. set data
-  globeEl.value.config = { ... }           // 3. configure
-})
+<script setup lang="ts">
+import 'globe-chart' // register the custom element
+import type { CountryEventDetail } from 'globe-chart'
+
+const onSelect = (e: Event) =>
+  console.log((e as CustomEvent<CountryEventDetail>).detail.iso)
 </script>
 
 <template>
-  <globe-chart ref="globeEl" legend theme="dark" />
+  <globe-chart
+    :data.prop="rows"
+    :config.prop="{ legend: { title: '…' } }"
+    legend
+    theme="dark"
+    @country-select="onSelect"
+  />
 </template>
 ```
 
-No plugin. No adapter. Configure Vue to accept custom elements via `isCustomElement` and you're done.
+`.prop` forces property binding for complex values; events are plain typed
+CustomEvents. Configure Vue to accept custom elements via `isCustomElement`
+and you're done.
 
 ---
 
@@ -60,4 +67,4 @@ Percentage of organizations reporting an identity-based breach (credential theft
 ## Tech
 
 - **Vue** 3 · **Vite** 5 · **TypeScript**
-- **globe-chart** `^0.2.7` — [npm](https://www.npmjs.com/package/globe-chart) · [GitHub](https://github.com/benji1703/globe-chart)
+- **globe-chart** `^0.3.0` — [npm](https://www.npmjs.com/package/globe-chart) · [GitHub](https://github.com/benji1703/globe-chart)

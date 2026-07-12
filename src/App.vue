@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import 'globe-chart'
-import { ref, onMounted } from 'vue'
+import type { CountryEventDetail, GlobeChartConfigInput } from 'globe-chart'
+import { ref } from 'vue'
 
-const globeEl = ref<HTMLElement | null>(null)
+const focus = ref<CountryEventDetail | null>(null)
+const onCountryFocus = (e: Event) => {
+  focus.value = (e as CustomEvent<CountryEventDetail>).detail
+}
 
 const DATA = [
   { iso: 'IL', value: 88, name: 'Israel' },
@@ -64,15 +68,10 @@ const STATS = [
   { label: 'Countries Affected', value: '49', c: '#0ea5e9' },
 ]
 
-onMounted(() => {
-  const el = globeEl.value as any
-  if (!el) return
-  el.data = DATA
-  el.config = {
-    legend: { title: '% Orgs Breached via Identity (2024)' },
-    colors: { low: '#0f172a', high: '#f59e0b' },
-  }
-})
+const CONFIG: GlobeChartConfigInput = {
+  legend: { title: '% Orgs Breached via Identity (2024)' },
+  colors: { low: '#0f172a', high: '#f59e0b' },
+}
 </script>
 
 <template>
@@ -93,6 +92,7 @@ onMounted(() => {
         <h1 class="title">Identity Breach Exposure Map</h1>
         <p class="desc">% of orgs reporting an identity-based breach in 2024 ·
           <code>globe-chart</code> web component · Vue
+          <span v-if="focus" class="focus">· ⌖ {{ focus.name }} — {{ focus.value }}%</span>
         </p>
       </div>
     </header>
@@ -104,9 +104,12 @@ onMounted(() => {
     </div>
     <main class="main">
       <globe-chart
-        ref="globeEl"
+        :data.prop="DATA"
+        :config.prop="CONFIG"
         legend
         theme="dark"
+        @country-hover="onCountryFocus"
+        @country-select="onCountryFocus"
         style="width: 100%; height: 100%; display: block"
       />
     </main>
@@ -127,6 +130,7 @@ onMounted(() => {
 .title { margin: 0; font-size: 1.1rem; font-weight: 700; color: #f1f5f9; letter-spacing: -0.01em; }
 .desc { margin: 0.1rem 0 0; font-size: 0.7rem; color: #475569; }
 .desc code { color: #f59e0b; background: rgba(245,158,11,0.08); padding: 0 0.3em; border-radius: 3px; }
+.focus { color: #f59e0b; font-weight: 600; font-family: monospace; }
 .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; padding: 6px 10px; background: #030712; border-bottom: 1px solid rgba(245,158,11,0.08); }
 .stat-card { background: #060d1a; border: 1px solid #1e293b; border-left-width: 3px; padding: 0.45rem 0.65rem; border-radius: 3px; }
 .stat-value { font-size: 1.2rem; font-weight: 700; font-family: monospace; line-height: 1; }

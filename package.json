@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "globe-chart": "^0.2.7",
+    "globe-chart": "^0.3.0",
     "vue": "^3.5.12"
   },
   "devDependencies": {
