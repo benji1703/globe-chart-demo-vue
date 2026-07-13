@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import 'globe-chart'
 import type { CountryEventDetail, GlobeChartConfigInput } from 'globe-chart'
+
+// Register <globe-chart> lazily: keeps three.js/globe.gl out of the initial
+// bundle. `.prop` bindings set DOM properties, which Lit replays on upgrade.
+void import('globe-chart')
 import { ref } from 'vue'
 
 const focus = ref<CountryEventDetail | null>(null)
