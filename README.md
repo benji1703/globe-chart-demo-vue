@@ -43,7 +43,7 @@ and you're done.
 ```bash
 npm install
 npm run dev      # → http://localhost:5173
-npm run build    # production build + countries JSON copy
+npm run build    # production build — the country map is code-split automatically
 ```
 
 ## Vue custom element setup
@@ -67,4 +67,4 @@ Percentage of organizations reporting an identity-based breach (credential theft
 ## Tech
 
 - **Vue** 3 · **Vite** 5 · **TypeScript**
-- **globe-chart** `^0.3.0` — [npm](https://www.npmjs.com/package/globe-chart) · [GitHub](https://github.com/benji1703/globe-chart)
+- **globe-chart** `^0.4.0` — [npm](https://www.npmjs.com/package/globe-chart) · [GitHub](https://github.com/benji1703/globe-chart)
